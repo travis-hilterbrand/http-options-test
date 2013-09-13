@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>HTTP Options Test</title>
+</head>
+
+<body>
+  <h3>HTTP Options Test</h3>
+  <div id="messages"></div>
+
+  <script src="json2.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      function appendMessage(message) {
+        $('#messages').append('<div>' + message + '</div>');
+      }
+      function doAjax(verb) {
+        var d = $.Deferred();
+
+        var options = {
+          url: '/resources',
+          type: verb,
+          cache: false
+        };
+        $.ajax(options).promise()
+          .done(function(ret) {
+            appendMessage('message received [' + JSON.stringify(ret) + ']');
+            d.resolve();
+          })
+          .fail(function(xhr, status, error) {
+            console.warn('ajax error', xhr.responseText);
+            appendMessage('message error [' + xhr.responseText + ']');
+            d.reject();
+          });
+        return d.promise(); 
+      }
+
+      appendMessage('performing GET');
+      doAjax('GET')
+        .done(function() {
+          appendMessage('performing OPTIONS');
+          doAjax('OPTIONS');
+        });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# node specific
+npm-debug.log
+node_modules/
+.lock-wscript
+build/node_modules/grunt/node_modules/glob/build
+
